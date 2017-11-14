@@ -39,6 +39,8 @@ class Context(object):
         self.test = None
         self.importer = Importer()
         self.timeouts = set()
+        robot.running.namespace.IMPORTER = self.importer
+        EXECUTION_CONTEXTS._contexts = [self]
 
     def __enter__(self):
         """Prepare the TestRobot's context
@@ -46,8 +48,8 @@ class Context(object):
            for running Tests and Keywords.
         """
         #HACK: For internal use by Robot BuiltIn Library
-        robot.running.namespace.IMPORTER = self.importer
-        EXECUTION_CONTEXTS._contexts = [self]
+        #robot.running.namespace.IMPORTER = self.importer
+        #EXECUTION_CONTEXTS._contexts = [self]
         #HACK: Registers output to LOGGER
         self.output.__enter__()
         return self
@@ -56,8 +58,8 @@ class Context(object):
         #HACK: Unregisters output from LOGGER
         self.output.__exit__(*exc)
         #HACK:
-        EXECUTION_CONTEXTS._contexts = []
-        robot.running.namespace.IMPORTER = None
+        #EXECUTION_CONTEXTS._contexts = []
+        #robot.running.namespace.IMPORTER = None
 
     @property
     def variables(self):

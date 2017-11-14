@@ -16,7 +16,7 @@ except ImportError:
 
 
 SETUP_REQUIRES = [
-    'zetup >= 0.2.34',
+    'zetup >= 0.2.42',
 ]
 
 
@@ -78,14 +78,18 @@ else:
     resolve(SETUP_REQUIRES)
     zfg = __import__('zetup').Zetup()
 
-    resolve(zfg.SETUP_REQUIRES or [])
+    resolve(str(req).split(';')[0] for req in zfg.SETUP_REQUIRES or [])
 
     sys.__stdout__ = __stdout__
     sys.stdout = stdout
 
 
 dist = zfg.setup(
-    setup_requires=SETUP_REQUIRES + (zfg.SETUP_REQUIRES or []),
+    setup_requires=SETUP_REQUIRES + [
+        str(req) for req in zfg.SETUP_REQUIRES or ()],
 
     use_zetup=True,
 )
+
+
+del dist.zetup_made
